@@ -13,9 +13,12 @@ interface DomainContext {
     fun minusKey(removedKey: Key<*>): DomainContext
 
     /**
+     * Replace logic.
+     *
      * The operators' order matters.
      */
     operator fun plus(other: DomainContext): DomainContext {
+
         if (other === EmptyDomainContext) return this
 
         return other.fold(this) { acc: DomainContext, element: DomainElement ->
@@ -27,16 +30,33 @@ interface DomainContext {
         }
     }
 
-
     /**
      * @see CombinedContext.toString()
      */
-    fun dump(): String =
-        "[" + fold("") { acc, element ->
-            if (acc.isEmpty()) element.toString() else "$acc, $element"
-        } + "]"
+    fun dump(): String = joinToString()
 }
 
+fun DomainContext.joinToString(): String =
+    fold(StringBuilder()) { acc, element ->
+        if (acc.isNotEmpty()) acc.append(", ")
+        acc.append(element)
+    }.insert(0, '[').append(']').toString()
+
+
+object EmptyDomainContext : DomainContext {
+
+    override fun <R> fold(initial: R, operation: (R, DomainElement) -> R): R = initial
+
+    override fun <E : DomainElement> get(key: Key<E>): E? = null
+
+    override fun minusKey(removedKey: Key<*>): DomainContext = this
+
+    override fun plus(other: DomainContext): DomainContext = other
+}
+
+/**
+ * Not an index set， just an element.
+ */
 interface DomainElement : DomainContext {
 
     val key: Key<*>
@@ -51,9 +71,9 @@ interface DomainElement : DomainContext {
     /**
      * Return a [DomainContext] without [DomainElement] with the specific key.
      */
-    override fun minusKey(removedKey: Key<*>): DomainContext {
-        return if (this.key == removedKey) EmptyDomainContext else this
-    }
+    override fun minusKey(removedKey: Key<*>): DomainContext =
+        if (this.key == removedKey) EmptyDomainContext else this
+
 }
 
 
@@ -64,9 +84,7 @@ internal class CombinedDomainContext(
     private val right: DomainElement
 ) : DomainContext {
 
-    override fun <E : DomainElement> get(key: Key<E>): E? {
-        return right[key] ?: left[key]
-    }
+    override fun <E : DomainElement> get(key: Key<E>): E? = right[key] ?: left[key]
 
     override fun minusKey(removedKey: Key<*>): DomainContext {
         val leftRetained by lazy { left.minusKey(removedKey) }
@@ -81,22 +99,9 @@ internal class CombinedDomainContext(
     override fun <R> fold(initial: R, operation: (R, DomainElement) -> R): R =
         operation(left.fold(initial, operation), right)
 
-    override fun toString(): String =
-        "[" + fold("") { acc, element ->
-            if (acc.isEmpty()) element.toString() else "$acc, $element"
-        } + "]"
+    override fun toString(): String = dump()
 }
 
-object EmptyDomainContext : DomainContext {
-
-    override fun <R> fold(initial: R, operation: (R, DomainElement) -> R): R = initial
-
-    override fun <E : DomainElement> get(key: Key<E>): E? = null
-
-    override fun minusKey(removedKey: Key<*>): DomainContext = this
-
-    override fun plus(other: DomainContext): DomainContext = other
-}
 
 abstract class AbsDomainElement(override val key: Key<*>) : DomainElement
 
