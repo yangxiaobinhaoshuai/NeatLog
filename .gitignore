@@ -1,0 +1,26 @@
+# Built application files
+*.apk
+*.ap_
+*.aab
+
+# Gradle files
+.gradle/
+build/
+app/build/
+
+# Local configuration
+local.properties
+
+# IDE files
+*.iml
+.idea/
+.DS_Store
+*.log
+
+# External native build
+.externalNativeBuild
+.cxx/
+
+# Keystore files (uncomment if needed)
+*.jks
+*.keystore
