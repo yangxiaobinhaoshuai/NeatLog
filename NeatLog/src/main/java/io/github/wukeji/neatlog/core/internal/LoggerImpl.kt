@@ -1,4 +1,4 @@
-package io.github.wukeji.neatlog.internal
+package io.github.wukeji.neatlog.core.internal
 
 import io.github.wukeji.neatlog.core.AbsLogger
 import io.github.wukeji.neatlog.core.LogFacade
@@ -7,10 +7,10 @@ import io.github.wukeji.neatlog.domain.EmptyDomainContext
 
 internal class LoggerImpl(private val newLogContext: DomainContext? = null) : AbsLogger() {
 
-    private val combinedContext by lazy {
-        if (newLogContext != null) super.logContext + newLogContext
-        else super.logContext
-    }
+    private val combinedContext
+        get() =
+            if (newLogContext != null) super.logContext + newLogContext
+            else super.logContext
 
     override val logContext: DomainContext get() = combinedContext
 

@@ -2,15 +2,16 @@ package io.github.wukeji.neatlog.core
 
 import io.github.wukeji.neatlog.domain.DomainContext
 
-interface LogAction {
+interface LogActionExecutor {
 
     val logContext: DomainContext
 
-    fun logPriority(
+    fun performLog(
         logContext: DomainContext,
-        level: LogLevel,
+        level: NeatLogLevel,
         tag: String,
         message: String,
-        throwable: Throwable?
+        throwable: Throwable? = null,
     )
+
 }

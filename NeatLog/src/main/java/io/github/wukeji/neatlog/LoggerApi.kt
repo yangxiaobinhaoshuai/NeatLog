@@ -2,16 +2,14 @@ package io.github.wukeji.neatlog
 
 import io.github.wukeji.neatlog.RawLogger.clone
 import io.github.wukeji.neatlog.core.LogFacade
-import io.github.wukeji.neatlog.core.LogLevel
+import io.github.wukeji.neatlog.core.NeatLogLevel
+import io.github.wukeji.neatlog.core.NeatLogPrinter
+import io.github.wukeji.neatlog.core.internal.LoggerImpl
 import io.github.wukeji.neatlog.domain.DomainContext
 import io.github.wukeji.neatlog.domain.EmptyDomainContext
-import io.github.wukeji.neatlog.elements.EnableLogElement
-import io.github.wukeji.neatlog.elements.GlobalTagPrefixLogElement
-import io.github.wukeji.neatlog.elements.GlobalTagSuffixLogElement
-import io.github.wukeji.neatlog.elements.LogLevelLogElement
-import io.github.wukeji.neatlog.elements.LogPrinterLogElement
-import io.github.wukeji.neatlog.internal.LoggerImpl
-import io.github.wukeji.neatlog.uitlity.LogPrinter
+import io.github.wukeji.neatlog.elements.EnableElement
+import io.github.wukeji.neatlog.elements.LogLevelThresholdElement
+import io.github.wukeji.neatlog.elements.LogPrinterElement
 
 /**
  * Used for [clone]
@@ -25,20 +23,16 @@ object RawLogger : LogFacade by LoggerImpl()
  */
 fun LogFacade.clone(
     enable: Boolean? = null,
-    globalTagPrefix: String? = null,
-    globalTagSuffix: String? = null,
-    logLevel: LogLevel? = null,
-    printer: LogPrinter? = null,
+    minLogLevel: NeatLogLevel? = null,
+    printer: NeatLogPrinter? = null,
     newLogContext: DomainContext? = null
 ): LogFacade {
 
     var mergedContext: DomainContext = EmptyDomainContext
 
-    if (enable != null) mergedContext += EnableLogElement(enable)
-    if (logLevel != null) mergedContext += LogLevelLogElement(logLevel)
-    if (globalTagPrefix != null) mergedContext += GlobalTagPrefixLogElement(globalTagPrefix)
-    if (globalTagSuffix != null) mergedContext += GlobalTagSuffixLogElement(globalTagSuffix)
-    if (printer != null) mergedContext += LogPrinterLogElement(printer)
+    if (enable != null) mergedContext += EnableElement(enable)
+    if (minLogLevel != null) mergedContext += LogLevelThresholdElement(minLogLevel)
+    if (printer != null) mergedContext += LogPrinterElement(printer)
     if (newLogContext != null) mergedContext += newLogContext
 
     return this.clone(mergedContext)
@@ -50,12 +44,12 @@ fun LogFacade.clone(
  *    val logI = LogFacade.clone().log(LogLevel.INFO,TAG)
  *    logI( your log message)
  */
-fun LogFacade.log(level: LogLevel, tag: String) = fun(message: String) =
+fun LogFacade.log(level: NeatLogLevel, tag: String) = fun(message: String) =
     when (level) {
-        LogLevel.VERBOSE -> this.v(tag, message)
-        LogLevel.INFO -> this.i(tag, message)
-        LogLevel.DEBUG -> this.d(tag, message)
-        LogLevel.ERROR -> this.e(tag, message)
+        NeatLogLevel.VERBOSE -> this.v(tag, message)
+        NeatLogLevel.INFO -> this.i(tag, message)
+        NeatLogLevel.DEBUG -> this.d(tag, message)
+        NeatLogLevel.ERROR -> this.e(tag, message)
     }
 
 

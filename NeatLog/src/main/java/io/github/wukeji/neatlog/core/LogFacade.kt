@@ -23,4 +23,7 @@ interface LogFacade {
     fun dumpContext(): String
 }
 
-enum class LogLevel { VERBOSE, INFO, DEBUG, ERROR }
+/**
+ * VERBOSE < INFO < DEBUG < ERROR
+ */
+enum class NeatLogLevel { VERBOSE, INFO, DEBUG, ERROR }

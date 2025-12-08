@@ -1,7 +1,0 @@
-package io.github.wukeji.neatlog.uitlity
-
-interface Formatter {
-
-    fun format(tag2Message: Pair<String, String>): Pair<String, String>
-
-}
