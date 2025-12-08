@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "NeatLog"
 include(":app")
+include(":NeatLog")
