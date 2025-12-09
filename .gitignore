@@ -5,8 +5,7 @@
 
 # Gradle files
 .gradle/
-build/
-app/build/
+**/build/
 
 # Local configuration
 local.properties
