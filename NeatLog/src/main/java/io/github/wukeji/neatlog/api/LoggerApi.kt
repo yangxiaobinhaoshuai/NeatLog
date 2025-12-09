@@ -1,6 +1,6 @@
-package io.github.wukeji.neatlog
+package io.github.wukeji.neatlog.api
 
-import io.github.wukeji.neatlog.RawLogger.clone
+import io.github.wukeji.neatlog.api.RawLogger.clone
 import io.github.wukeji.neatlog.core.LogFacade
 import io.github.wukeji.neatlog.core.NeatLogLevel
 import io.github.wukeji.neatlog.core.NeatLogPrinter
@@ -21,7 +21,7 @@ object RawLogger : LogFacade by LoggerImpl()
  *
  * Preserve the previous context.
  */
-fun LogFacade.clone(
+fun LogFacade.cloneWith(
     enable: Boolean? = null,
     minLogLevel: NeatLogLevel? = null,
     printer: NeatLogPrinter? = null,
