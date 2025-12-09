@@ -1,6 +1,7 @@
-package io.github.wukeji.neatlog.api
+package io.github.wukeji.neatlog.api.android
 
 import android.util.Log
+import io.github.wukeji.neatlog.api.RawLogger
 import io.github.wukeji.neatlog.core.NeatLogLevel
 import io.github.wukeji.neatlog.core.NeatLogPrinter
 import io.github.wukeji.neatlog.elements.LogPrinterElement

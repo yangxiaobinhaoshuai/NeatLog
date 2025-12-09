@@ -7,7 +7,7 @@ import java.util.WeakHashMap
 /**
  * Keep field singleton in interface
  */
-internal object LoggerRegistry {
+object LoggerRegistry {
 
     private val cache: MutableMap<Any, LogFacade> = Collections.synchronizedMap(WeakHashMap())
 

@@ -97,6 +97,10 @@ object NeatLogger : LogFacade {
     /**
      * Scoped logger
      */
-    fun tag(tag: String): LogFacade =
-        delegate.clone(InterceptorElement(TagPrefixInterceptor(tag)))
+    fun tag(tag: String): LogFacade = delegate.clone(InterceptorElement(TagPrefixInterceptor(tag)))
+}
+
+
+fun NeatLogger.taggedMixin(tag: String): LogMixin = object : LogMixin {
+    override val LogMixin.logTAG: String get() = tag
 }

@@ -2,8 +2,6 @@ package io.github.wukeji.neatlog.api
 
 import io.github.wukeji.neatlog.core.LogFacade
 import io.github.wukeji.neatlog.core.NeatLogLevel
-import io.github.wukeji.neatlog.elements.InterceptorElement
-import io.github.wukeji.neatlog.interceptors.MessagePrefixInterceptor
 
 val Any?.neatName: String get() = this?.javaClass?.simpleName ?: "NULL"
 private const val MAX_LOG_TAG_LENGTH = 23
@@ -18,12 +16,7 @@ interface LogMixin {
     /**
      * Override it if u need.
      */
-    val neatLogger: LogFacade
-        get() = LoggerRegistry.getOrCreate(this) {
-            val messagePrefix = "${this.neatName}: ${this.hashCode()}: "
-            val prefix = MessagePrefixInterceptor(messagePrefix)
-            AndroidUtilLogger.clone(InterceptorElement(prefix))
-        }
+    val neatLogger: LogFacade get() = LoggerRegistry.getOrCreate(this) { RawLogger }
 
     val logI: LogFun get() = neatLogger.log(NeatLogLevel.INFO, logTAG)
     val logD: LogFun get() = neatLogger.log(NeatLogLevel.DEBUG, logTAG)
