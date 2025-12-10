@@ -5,7 +5,7 @@ import io.github.wukeji.neatlog.core.internal.LogPipelineExecutor
 
 abstract class AbsLogger : LogFacade, LogActionExecutor by LogPipelineExecutor {
 
-    private val logFunc = bindContext(logContext)
+    private val logFunc by lazy { bindContext(logContext) }
 
     private fun bindContext(logContext: DomainContext) =
         fun(
